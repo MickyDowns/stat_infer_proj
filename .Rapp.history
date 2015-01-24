@@ -1,0 +1,35 @@
+swirl
+swirl()
+swrl()
+ls
+debug(ls)
+ls
+ls()
+Y
+y
+install.packages("swirl")
+library(swirl)
+install_from_swirl("Statistical Inference")
+swirl()
+0.9167
+0.917
+info()
+nxt()
+0.92
+skip()
+deck
+52
+4/52
+0/52
+5*(12/52)
+12/52
+2/51
+1/2*1.6*0.8
+0.64
+nxt()
+skip()
+mypdf
+getwd()
+setwd("/User/mdowns/Pers/Ed/Courses/JH5 - statistical inference")
+setwd("/User/mdowns/Pers/Ed/Courses")
+render("si_proj_mstr.Rmd", "pdf_document")
