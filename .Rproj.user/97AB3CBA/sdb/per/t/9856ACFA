@@ -1,0 +1,17 @@
+{
+    "contents" : "# question 1\nbase=c(140,138,150,148,135)\nwk2=c(132,135,151,146,130)\ndifference=base-wk2\ns=sd(difference)\nn=5\nmean(difference)+c(-1,1)*qt(0.975,n-1)*s/sqrt(n)\n\nt.test(difference)\n# answer: 0.08652, i divided in 1/2 for two-sided\n\n# question 2\nmn=1100\ns=30\nn=9\nmn+c(-1,1)*qt(0.975,n-1,lower.tail=TRUE)*s/sqrt(n)\n# true student has may need to get int\n\n\n# question 3\nn=8\np=c(1,0,0,0)\nc=c(0,1,1,1)\ndifference=c\ns=sd(difference)\n\nmean(difference)+c(-1,1)*qt(0.975,n-1,lower.tail=FALSE)*s/sqrt(n)\nt.test(difference,alternative=\"greater\")$p.value\n# assuming 1. that \"exact\" means testing if the two are equal and \n# 2. default for t.test is 2-sided. So, dividing result in half. \n\n\n\n# question 4\nmu0=1/100\nmua=10/1787\n\nlambda=1/100\n\nppois(0.56,1,lower.tail=T) # yields 0.37\nppois(0.6,1,lower.tail=T) # yields 0.37\nppois(5.7,10,lower.tail=T) # yields 0.07\nppois(6,10,lower.tail=T) # yields 0.13 guessed this one\nppois(5,10,lower.tail=T) # 0.067\nppois(56,100,lower.tail=T) # yields 0.\nppois(55,100,lower.tail=T) # yields 0.\nppois(0.,1/100,lower.tail=F)\n\n# question 5\nn=18\nymean=-3\nxmean=1\ndifference=ymean-xmean\n\ndifference\n# question 6\nn=9\n# 1077 to 1123 at 90% CI\n\n\n# question 7\nn=100\nmua=0.01\ns=0.04\nalpha=0.05\nz=qnorm(1-alpha)\npnorm(0+z*s/sqrt(n),mean=mua,sd=s/sqrt(n),lower.tail=FALSE)\n\n# question 8\npower.t.test(power=0.9,delta=(mua-0),sd=s,type=\"one.sample\",alt=\"one.sided\")$n\n\n\n# question 9\n\n",
+    "created" : 1422827147385.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "254025610",
+    "id" : "9856ACFA",
+    "lastKnownWriteTime" : 1423182442,
+    "path" : "~/Documents/Pers/Ed/Courses/JH5 - statistical inference/stat_infer_proj/quiz_sec4.R",
+    "project_path" : "quiz_sec4.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

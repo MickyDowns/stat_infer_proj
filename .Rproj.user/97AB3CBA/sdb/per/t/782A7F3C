@@ -1,0 +1,17 @@
+{
+    "contents" : "---\ntitle: \"bootstrapping example\"\noutput: html_document\n---\n\n### bootstrapping example\n\n```{r}\nlibrary(UsingR)\ndata(father.son)\n\nx=father.son$sheight\nn=length(x)\nB=10000\n\n# generate 10,000 samples of length n from from the son's height column \n# replace=TRUE makes an \"emperical distribution\" (distribution where prob of any given sample is 1/n)\nresamples=matrix(sample(x,n*B,replace=TRUE),B,n)\n# then find median of all 10,000 samples\nresampledMedians=apply(resamples,1,median)\n```\n\n```{r}\n# estimate sd for 10,000 samples\nB=10000\nresamples=matrix(sample(x,n*B,replace=TRUE),B,n)\nmedians=apply(resamples,1,median)\nsd(medians)\n\n# get CI for estimate\nquantile(medians, c(0.025,0.975))\n\n# plot it\ng=ggplot(data.frame(medians=medians),aes(x=medians)) # assign g output of ggplot function which requires data.frame\ng=g+geom_histogram(color=\"black\",fill=\"red\",binwidth=0.05) # add histogram layer\ng\n```\n",
+    "created" : 1422815307273.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "974423569",
+    "id" : "782A7F3C",
+    "lastKnownWriteTime" : 1422818176,
+    "path" : "~/Documents/Pers/Ed/Courses/JH5 - statistical inference/stat_infer_proj/bootstrapping example.Rmd",
+    "project_path" : "bootstrapping example.Rmd",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}

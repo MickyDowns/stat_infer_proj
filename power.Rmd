@@ -1,0 +1,112 @@
+---
+title: "power"
+output: html_document
+---
+
+### calculating power manually
+```{r}
+
+alpha = 0.05 # this is the type I error rate. 
+z = qnorm(1 - alpha) # yields 1.645 or num SD for 95th percentile
+
+mu0=30    # this is the center of your population distribution
+mua=32    # this is the mean of your sample 
+sigma=4   # this is your SD (or SE)
+n=16      # observations
+
+pnorm(mu0 + z * sigma/sqrt(n), mean = mu0, sd = sigma/sqrt(n), lower.tail = FALSE)
+# technically, this give you the actual alpha which, where mean = mu0 is 0.05 
+
+pnorm(mu0 + z * sigma/sqrt(n), mean = mua, sd = sigma/sqrt(n), lower.tail = FALSE)
+# this gives you the alpha (probability) if mean = mua is 0.6388. so, you've got a 65% chance of getting a mean as large or larger than 32 w/ this experiment. 
+```
+
+### using ggplot() and manipulate()
+```{r}
+# so, let's try to illustrate w/ manipulate
+
+library(manipulate)
+library(ggplot2)
+
+mua=32    # this is the mean of your sample 
+sigma=4   # this is your SD (or SE)
+n=16      # observations
+mu0=30
+myplot = function(sigma, mua, n, alpha) {
+     g = ggplot(data.frame(mu = c(27, 36)), aes(x = mu))
+     g = g + stat_function(fun = dnorm, geom = "line",
+                           args = list(mean = mu0,sd = sigma/sqrt(n)), 
+                           size = 2, col = "red")
+     g = g + stat_function(fun = dnorm, geom = "line", 
+                           args = list(mean = mua, sd = sigma/sqrt(n)), 
+                           size = 2, col = "blue") 
+     xitc = mu0 + qnorm(1 - alpha) * sigma/sqrt(n)
+     g = g + geom_vline(xintercept = xitc, size = 3)
+     g
+}
+manipulate(myplot(sigma, mua, n, alpha), 
+           sigma = slider(1, 10, step = 1, initial = 4),
+           mua = slider(30, 35, step = 1, initial = 32), 
+           n = slider(1, 50, step = 1, initial = 16), 
+           alpha = slider(0.01, 0.1, step = 0.01, initial = 0.05))
+```
+
+### using power.t.test()
+```{r}
+# solving for power
+power.t.test(n = 16, delta = 2/4, sd = 1, type = "one.sample", alt = "one.sided")$power
+
+power.t.test(n = 16, delta = 2, sd = 4, type = "one.sample", alt = "one.sided")$power
+
+power.t.test(n = 16, delta = 100, sd = 200, type = "one.sample", alt = "one.sided")$power
+
+# solving for n
+power.t.test(power = 0.8, delta = 100, sd = 200, type = "one.sample", alt = "one.sided")$n
+
+```
+
+### adjusting p-values
+```{r}
+set.seed(1010093) 
+pValues <- rep(NA, 1000) 
+for (i in 1:1000) {
+     y <- rnorm(20)
+     x <- rnorm(20)
+     pValues[i] <- summary(lm(y ~ x))$coeff[2, 4]
+}
+# Controls false positive rate
+sum(pValues < 0.05)
+# nets 51 p-values considered "significant" when really there's no relationship btwn x and y.
+
+# Controls FWER
+sum(p.adjust(pValues, method = "bonferroni") < 0.05)
+
+
+# Controls FDR
+sum(p.adjust(pValues, method = "BH") < 0.05)
+
+```
+
+### 50% true positives
+```{r}
+
+set.seed(1010093)
+pValues <- rep(NA, 1000)
+for (i in 1:1000) {
+     x <- rnorm(20)
+     # First 500 beta=0, last 500 beta=2 
+     if(i<=500){y <- rnorm(20) }else{y<-rnorm(20,mean=2*x) }
+     pValues[i] <- summary(lm(y ~ x))$coeff[2, 4] }
+trueStatus <- rep(c("zero", "not zero"), each = 500) 
+table(pValues < 0.05, trueStatus)
+
+# Controls FWER
+table(p.adjust(pValues, method = "bonferroni") < 0.05, trueStatus)
+# Controls FDR
+table(p.adjust(pValues, method = "BH") < 0.05, trueStatus)
+
+# graphing the results
+par(mfrow = c(1, 2))
+plot(pValues, p.adjust(pValues, method = "bonferroni"), pch = 19) 
+plot(pValues, p.adjust(pValues, method = "BH"), pch = 19)
+```

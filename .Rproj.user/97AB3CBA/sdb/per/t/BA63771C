@@ -1,0 +1,17 @@
+{
+    "contents" : "---\ntitle: \"Untitled\"\noutput: html_document\n---\n\n### sleep data\n\n```{r}\ndata(sleep)\ng1 <- sleep$extra[1 : 10]\ng2 <- sleep$extra[11 : 20]\ndifference <- g2 - g1\nmn <- mean(difference)\ns <- sd(difference)\nn <- 10\nmn + c(-1, 1) * qt(.975, n-1) * s / sqrt(n)\nt.test(difference)$conf.int\nt.test(difference)\nt.test(g2,g1,paired=TRUE)\nt.test(extra~I(relevel(group,2)),paired=TRUE,data=sleep)\n\nplot(g1,g2)\n\n```\n\n### chick weight\n```{r}\nlibrary(datasets); data(ChickWeight); library(reshape2)\n##define weight gain or loss\nwideCW <- dcast(ChickWeight, Diet + Chick ~ Time, value.var = \"weight\")\nnames(wideCW)[-(1 : 2)] <- paste(\"time\", names(wideCW)[-(1 : 2)], sep = \"\")\nlibrary(dplyr)\nwideCW <- mutate(wideCW,gain = time21 - time0 )\n\nwideCW14 <- subset(wideCW, Diet %in% c(1, 4))\nrbind(\n     t.test(gain ~ Diet, paired = FALSE, var.equal = TRUE, data = wideCW14)$conf,\n     t.test(gain ~ Diet, paired = FALSE, var.equal = FALSE, data = wideCW14)$conf)\n\nt.test(gain ~ Diet, paired = FALSE, var.equal = TRUE, data = wideCW14)\n```\n\n### two-sided tests\n```{r}\nlibrary(UsingR); data(father.son)\nt.test(father.son$sheight - father.son$fheight)\n\n```\n\n### quiz\n```{r}\n#q1: 1100+c(1,-1)*qt(0.975,9-1)*(30/sqrt(9))\n#q2: \ndiff=-2\nn=9\ndiff+*qt(0.975,n-1)*s/sqrt(9)=0\n\n\n#q4: \nmn_s=5\nmn_n=3\nsd_s=0.68\nsd_n=0.6\ndif=mn_n-mn_s\nn=20\n\ndif+c(1,-1)*qt(0.975,20-2)*sqrt(((10*0.68^2)+(10*0.6^2))/(10+10-2))*(1/10+1/10)^(1/2)\n\ndf=(0.68/10+0.6/10)^2/((0.68/10)^2/(10-1)+(0.6/10)^2/(10-1))\n\ndif+c(-1,1)*qt(0.975,df)*(0.68/10+0.6/10)^(1/2)\n\n#6\nmn_s=6\nmn_n=4\nsd_s=2\nsd_n=0.5\ndif=mn_s-mn_n\nn=200\n\n#dif+c(1,-1)*qt(0.975,n-2)*sqrt(((10*sd_s^2)+(100*sd_n^2))/(n-2))*(1/100+1/100)^(1/2)\n\ndf=(sd_s/100+sd_n/100)^2/((sd_s/100)^2/(100-1)+(sd_n/100)^2/(100-1))\n\ndif+c(-1,1)*qt(0.975,df)*(sd_s/100+sd_n/100)^(1/2)\n\n\n```\n\n",
+    "created" : 1422147275685.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2819575954",
+    "id" : "BA63771C",
+    "lastKnownWriteTime" : 1422332656,
+    "path" : "~/Documents/Pers/Ed/Courses/JH5 - statistical inference/stat_infer_proj/lecture code.Rmd",
+    "project_path" : "lecture code.Rmd",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}

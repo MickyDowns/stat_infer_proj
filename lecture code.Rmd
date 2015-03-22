@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+### sleep data
+
+```{r}
+data(sleep)
+g1 <- sleep$extra[1 : 10]
+g2 <- sleep$extra[11 : 20]
+difference <- g2 - g1
+mn <- mean(difference)
+s <- sd(difference)
+n <- 10
+mn + c(-1, 1) * qt(.975, n-1) * s / sqrt(n)
+t.test(difference)$conf.int
+t.test(difference)
+t.test(g2,g1,paired=TRUE)
+t.test(extra~I(relevel(group,2)),paired=TRUE,data=sleep)
+
+plot(g1,g2)
+
+```
+
+### chick weight
+```{r}
+library(datasets); data(ChickWeight); library(reshape2)
+##define weight gain or loss
+wideCW <- dcast(ChickWeight, Diet + Chick ~ Time, value.var = "weight")
+names(wideCW)[-(1 : 2)] <- paste("time", names(wideCW)[-(1 : 2)], sep = "")
+library(dplyr)
+wideCW <- mutate(wideCW,gain = time21 - time0 )
+
+wideCW14 <- subset(wideCW, Diet %in% c(1, 4))
+rbind(
+     t.test(gain ~ Diet, paired = FALSE, var.equal = TRUE, data = wideCW14)$conf,
+     t.test(gain ~ Diet, paired = FALSE, var.equal = FALSE, data = wideCW14)$conf)
+
+t.test(gain ~ Diet, paired = FALSE, var.equal = TRUE, data = wideCW14)
+```
+
+### two-sided tests
+```{r}
+library(UsingR); data(father.son)
+t.test(father.son$sheight - father.son$fheight)
+
+```
+
+### quiz
+```{r}
+#q1: 1100+c(1,-1)*qt(0.975,9-1)*(30/sqrt(9))
+#q2: 
+diff=-2
+n=9
+diff+*qt(0.975,n-1)*s/sqrt(9)=0
+
+
+#q4: 
+mn_s=5
+mn_n=3
+sd_s=0.68
+sd_n=0.6
+dif=mn_n-mn_s
+n=20
+
+dif+c(1,-1)*qt(0.975,20-2)*sqrt(((10*0.68^2)+(10*0.6^2))/(10+10-2))*(1/10+1/10)^(1/2)
+
+df=(0.68/10+0.6/10)^2/((0.68/10)^2/(10-1)+(0.6/10)^2/(10-1))
+
+dif+c(-1,1)*qt(0.975,df)*(0.68/10+0.6/10)^(1/2)
+
+#6
+mn_s=6
+mn_n=4
+sd_s=2
+sd_n=0.5
+dif=mn_s-mn_n
+n=200
+
+#dif+c(1,-1)*qt(0.975,n-2)*sqrt(((10*sd_s^2)+(100*sd_n^2))/(n-2))*(1/100+1/100)^(1/2)
+
+df=(sd_s/100+sd_n/100)^2/((sd_s/100)^2/(100-1)+(sd_n/100)^2/(100-1))
+
+dif+c(-1,1)*qt(0.975,df)*(sd_s/100+sd_n/100)^(1/2)
+
+
+```
+

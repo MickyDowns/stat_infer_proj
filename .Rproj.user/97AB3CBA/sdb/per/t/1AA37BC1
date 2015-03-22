@@ -1,0 +1,17 @@
+{
+    "contents" : "---\ntitle: \"permutations\"\noutput: html_document\n---\n\n### plot base data\n```{r}\ndata(InsectSprays)\nboxplot(count~spray, data=InsectSprays)\n```\n\n### permutation test on sprays B v C\n```{r}\n# take out only observations w/ spray == B or C\nsubdata=InsectSprays[InsectSprays$spray %in% c(\"B\",\"C\"),]\n# get the count of dead insects for remaining records\ny=subdata$count\n# get the spray for remaining records\ngroup=as.character(subdata$spray)\n# make a function to calculate your statistic of interest: the difference of the means for each group\ntestStat=function(w,g) mean(w[g==\"B\"])-mean(w[g==\"C\"])\n# call the function to generate your statisitc passing your counts (y) and sprays (group)\nobservedStat=testStat(y,group)\n# run your permutations by sampling from the the spary variable (group), grabbing the corresponding y, calculating the mean difference... 10,000 times. \npermutations=sapply(1:10000,function(i) testStat(y,sample(group)))\n# return the observed statistic\nobservedStat\n\n\n# now look for pct of permuations that were more extreme than the test statistic\nmean(permutations>observedStat)\n\n# plot results\nhist(permutations,xlim=c(-10,15),breaks=50,col=\"lightblue\")\nabline(v=observedStat,col=\"red\",lwd=4)\n```\n",
+    "created" : 1422819982366.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4246421525",
+    "id" : "1AA37BC1",
+    "lastKnownWriteTime" : 1423182442,
+    "path" : "~/Documents/Pers/Ed/Courses/JH5 - statistical inference/stat_infer_proj/permutations.Rmd",
+    "project_path" : "permutations.Rmd",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}

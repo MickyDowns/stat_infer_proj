@@ -1,0 +1,36 @@
+---
+title: "permutations"
+output: html_document
+---
+
+### plot base data
+```{r}
+data(InsectSprays)
+boxplot(count~spray, data=InsectSprays)
+```
+
+### permutation test on sprays B v C
+```{r}
+# take out only observations w/ spray == B or C
+subdata=InsectSprays[InsectSprays$spray %in% c("B","C"),]
+# get the count of dead insects for remaining records
+y=subdata$count
+# get the spray for remaining records
+group=as.character(subdata$spray)
+# make a function to calculate your statistic of interest: the difference of the means for each group
+testStat=function(w,g) mean(w[g=="B"])-mean(w[g=="C"])
+# call the function to generate your statisitc passing your counts (y) and sprays (group)
+observedStat=testStat(y,group)
+# run your permutations by sampling from the the spary variable (group), grabbing the corresponding y, calculating the mean difference... 10,000 times. 
+permutations=sapply(1:10000,function(i) testStat(y,sample(group)))
+# return the observed statistic
+observedStat
+
+
+# now look for pct of permuations that were more extreme than the test statistic
+mean(permutations>observedStat)
+
+# plot results
+hist(permutations,xlim=c(-10,15),breaks=50,col="lightblue")
+abline(v=observedStat,col="red",lwd=4)
+```
